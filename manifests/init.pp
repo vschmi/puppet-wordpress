@@ -20,7 +20,7 @@ class wordpress(
   $wordpress_admin_mail = 'localhost@localhost',
   $blogname = 'wordpress blog',
   $multisite = false,
-  $pach_current_site = '/',
+  $path_current_site = '/',
 ) {
   $db_name = $wordpress_db_name
   $db_user = $wordpress_db_user
