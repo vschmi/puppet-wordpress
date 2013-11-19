@@ -11,15 +11,15 @@
 #
 # include wordpress::config
 #
-class wordpress::config inherits wordpress (
-) {
+class wordpress::config inherits wordpress {
 
   file { '/opt/wordpress/db_backup':
     ensure => directory,
   }
 
-  file { '/opt/wordpress/initial_dump.sql'
+  file { '/opt/wordpress/initial_dump.sql':
     ensure  => file,
     content => template('wordpress/initial_dump.sql'),
+    require => File['/opt/wordpress/db_backup'],
   }
 }
