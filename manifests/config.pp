@@ -11,10 +11,7 @@
 #
 # include wordpress::config
 #
-class wordpress::config(
-  $wordpress_admin = 'admin',
-  $wordpress_admin_mail = 'localhost@localhost',
-  $blogname = 'wordpress blog',
+class wordpress::config inherits wordpress (
 ) {
 
   file { '/opt/wordpress/db_backup':
