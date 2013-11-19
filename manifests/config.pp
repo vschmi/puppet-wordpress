@@ -32,6 +32,7 @@ class wordpress::config inherits wordpress {
       '/usr/bin:/sbin',
       '/bin',
     ],
-    unless  => "mysql -u $wordpress_db_user -h localhost -p$worpress_db_password --database $wordpress_db_name -e 'show tables;' | grep Tables_in_$wordpress_db_name -c",
+    onlyif  => "mysql -u $wordpress_db_user -h localhost -p$worpress_db_password --database $wordpress_db_name -e 'show tables;' | grep Tables_in_$wordpress_db_name -c",
   }
+  notify { "mysql -u $wordpress_db_user -h localhost -p$worpress_db_password --database $wordpress_db_name -e 'show tables;' | grep Tables_in_$wordpress_db_name -c": }
 }
