@@ -1,5 +1,5 @@
 # Install wordpress application and its dependencies
-class wordpress::app {
+class wordpress::app inherits wordpress {
 
   $wordpress_archive = 'wordpress-3.5.1.zip'
 
@@ -56,7 +56,6 @@ class wordpress::app {
                       'wordpress_themes',
                       'wordpress_plugins',
                       'wordpress_installer',
-                      'wordpress_htaccess_configuration'
                       ];
     'wordpress_installer':
       ensure  =>  file,
@@ -67,11 +66,6 @@ class wordpress::app {
       ensure     =>  file,
       path       =>  '/opt/wordpress/wp-config.php',
       content    =>  template('wordpress/wp-config.erb'),
-      subscribe  =>  Exec['wordpress_extract_installer'];
-    'wordpress_htaccess_configuration':
-      ensure     =>  file,
-      path       =>  '/opt/wordpress/.htaccess',
-      source     =>  'puppet:///modules/wordpress/.htaccess',
       subscribe  =>  Exec['wordpress_extract_installer'];
     'wordpress_themes':
       ensure     => directory,
@@ -99,6 +93,13 @@ class wordpress::app {
       require  => Package[$apache];
     }
 
+    if $::wordpress::multisite == true {
+      file { '/opt/wordpress/.htaccess':
+        ensure  => file,
+        content => template('wordpress/htaccess.erb'),
+        require => File['wordpress_setup_files_dir'],
+      }
+    }
       exec {
       'wordpress_extract_installer':
         command      => "unzip -o\
