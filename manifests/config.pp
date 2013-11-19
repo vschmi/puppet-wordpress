@@ -17,7 +17,7 @@ class wordpress::config inherits wordpress {
     ensure => directory,
   }
 
-  file { '/opt/wordpress/initial_dump.sql':
+  file { '/opt/wordpress/db_backup/initial_dump.sql':
     ensure  => file,
     content => template('wordpress/initial_dump.sql.erb'),
     require => File['/opt/wordpress/db_backup'],
