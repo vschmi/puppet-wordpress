@@ -22,4 +22,16 @@ class wordpress::config inherits wordpress {
     content => template('wordpress/initial_dump.sql.erb'),
     require => File['/opt/wordpress/db_backup'],
   }
+
+  exec { "mysql -u $wordpress_db_user -p$wordpress_db_password $wordpress_db_name < /opt/wordpress/db_backup/initial_dump.sql":
+    require => File['/opt/wordpress/db_backup/initial_dump.sql'],
+    path    => [
+      '/usr/local/sbin',
+      '/usr/local/bin',
+      '/usr/sbin',
+      '/usr/bin:/sbin',
+      '/bin',
+    ],
+    unless  => "mysql -u $wordpress_db_user -h localhost -p$worpress_db_password --database $wordpress_db_name -e 'show tables;' | grep Tables_in_$wordpress_db_name -c",
+  }
 }
