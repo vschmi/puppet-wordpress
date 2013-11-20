@@ -25,10 +25,14 @@ class wordpress(
   $db_name = $wordpress_db_name
   $db_user = $wordpress_db_user
   $db_password = $wordpress_db_password
-  include 'wordpress::app'
-  include 'wordpress::db'
+
+  include 'apache2'
 
   class { 'wordpress::config':
     require => Class['wordpress::app', 'wordpress::db']
   }
+  class { 'wordpress::app':
+    require => Class['apache2'],
+  }
+  include 'wordpress::db'
 }
